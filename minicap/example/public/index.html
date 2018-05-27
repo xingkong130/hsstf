@@ -1,48 +1,86 @@
 <!doctype html>
-<canvas id="canvas" style="border: 1px solid red;"></canvas>
+<head>
 
+</head>
+<body>
+<button onclick="sendRotaMsg(90)">旋转</button>
+<canvas id="canvas" style="border: 3px black;" onclick="sendPressEvent(event)">
+</canvas>
+</body>
 <script>
-/*jshint browser:true*/
+    /*jshint browser:true*/
+    function getImage() {
+        var BLANK_IMG = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+        var canvas = document.getElementById('canvas')
+            , g = canvas.getContext('2d');
+        miniCapSocketClient.binaryType = 'blob';
 
-var BLANK_IMG =
-  'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+        miniCapSocketClient.onclose = function () {
+            console.log('onclose', arguments)
+        };
 
-var canvas = document.getElementById('canvas')
-  , g = canvas.getContext('2d')
+        miniCapSocketClient.onerror = function () {
+            console.log('onerror', arguments)
+        };
 
-var ws = new WebSocket('ws://localhost:9002', 'minicap')
-ws.binaryType = 'blob'
+        miniCapSocketClient.onmessage = function (message) {
+            var blob = new Blob([message.data], {type: 'image/jpeg'});
+            var URL = window.URL || window.webkitURL;
+            var img = new Image();
+            img.onload = function () {
+                console.log(img.width, img.height);
+                canvas.width = img.width;
+                canvas.height = img.height;
+                g.drawImage(img, 0, 0);
+                img.onload = null;
+                img.src = BLANK_IMG;
+                img = null;
+                u = null;
+                blob = null
+            };
+            img.src = URL.createObjectURL(blob);
+        };
+    }
 
-ws.onclose = function() {
-  console.log('onclose', arguments)
-}
+    //1439 2559
+    //Point realpoint = new Point((int)(point.X / banner.PercentX) * device.Scale, (int)(point.Y / banner.PercentY) * device.Scale);
+    function sendPressEvent(e) {
+        var canvas = document.getElementById('canvas');
+        var point = getCanvasPos(canvas, e);
+        //virtual w 448 h 782   real w 1440 h2560
+        console.info(point.x + " | " + point.y);
 
-ws.onerror = function() {
-  console.log('onerror', arguments)
-}
+        //pointer/virtual*real
+        //star cmd:adb shell LD_LIBRARY_PATH=/data/local/tmp /data/local/tmp/minicap -P 512x768@512x768/90
+        var realX = Math.floor(point.x / 512 * 1024);
+        var realY = Math.floor(point.y / 768 * 1024);
+        // var realY = Math.floor(pointer90Mapping(point.y, 768) / 768 * 768);
+        var msg = "d 0 " + realX + " " + realY + " 50\nc\nu 0\nc\n";
+        miniTouchSocketClient.send(msg);
+    }
 
-ws.onmessage = function(message) {
-  var blob = new Blob([message.data], {type: 'image/jpeg'})
-  var URL = window.URL || window.webkitURL
-  var img = new Image()
-  img.onload = function() {
-    console.log(img.width, img.height)
-    canvas.width = img.width
-    canvas.height = img.height
-    g.drawImage(img, 0, 0)
-    img.onload = null
-    img.src = BLANK_IMG
-    img = null
-    u = null
-    blob = null
-  }
-  var u = URL.createObjectURL(blob)
-  img.src = u
-}
+    function pointer90Mapping(py, y) {
+        var lastY;
+        lastY = y - py;
+        return lastY;
+    }
 
-ws.onopen = function() {
-  console.log('onopen', arguments)
-  ws.send('1920x1080/0')
-}
+    function sendRotaMsg(msg) {
+        //virtual w 448 h 782   real w 1440 h2560
+        miniCapSocketClient.send(msg);
+    }
 
+    //获取鼠标在canvas上的坐标
+    function getCanvasPos(canvas, e) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: (e.clientX - rect.left),
+            y: (e.clientY - rect.top)
+        };
+    }
+
+    var miniCapSocketClient = new WebSocket('ws://192.168.0.4:9002', 'minicap');
+    // var miniCapSocketClient = new WebSocket('ws://192.168.0.4:9002', 'miniaudio');
+    var miniTouchSocketClient = new WebSocket('ws://192.168.0.4:9002', 'minitouch');
+    getImage();
 </script>

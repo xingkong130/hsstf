@@ -1,0 +1,1 @@
+D:\NDK\android-ndk-r11c\ndk-build.cmd
