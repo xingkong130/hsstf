@@ -16,7 +16,6 @@ var server = http.createServer(app);
 
 var wss = new WebSocketServer({server: server});
 
-
 wss.on('connection', function (wsClient) {
     console.info("Got a  client connected 9002 port " + wsClient.protocol);
     var miniCapSocket = net.Socket();
