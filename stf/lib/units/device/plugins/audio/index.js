@@ -2,115 +2,54 @@ var util = require('util')
 
 var Promise = require('bluebird')
 var syrup = require('stf-syrup')
-var split = require('split')
+var WebSocket = require('ws')
+var uuid = require('uuid')
 var EventEmitter = require('eventemitter3')
+var split = require('split')
 var adbkit = require('adbkit')
-var Parser = require('adbkit/lib/adb/parser')
 
-var wire = require('../../../../wire')
 var logger = require('../../../../util/logger')
 var lifecycle = require('../../../../util/lifecycle')
-var SeqQueue = require('../../../../wire/seqqueue')
+//var FrameConfig = require('./util/frameconfig')
+var BroadcastSet = require('./util/broadcastset')
 var StateQueue = require('../../../../util/statequeue')
 var RiskyStream = require('../../../../util/riskystream')
 var FailCounter = require('../../../../util/failcounter')
 
 module.exports = syrup.serial()
   .dependency(require('../../support/adb'))
-  .dependency(require('../../support/router'))
   .dependency(require('../../resources/miniaudio'))
-  .dependency(require('../util/flags'))
-  .define(function(options, adb, router, miniaudio, flags) {
-    var log = logger.createLogger('device:plugins:audio')
-
-    function AudioConsumer(config) {
+  .dependency(require('./options'))
+  .define(function(options, adb, miniaudio, audioOptions) {
+    var log = logger.createLogger('device:plugins:audio:index')
+    
+    function FrameProducer() {
       EventEmitter.call(this)
       this.actionQueue = []
-      this.runningState = AudioConsumer.STATE_STOPPED
+      this.runningState = FrameProducer.STATE_STOPPED
       this.desiredState = new StateQueue()
       this.output = null
       this.socket = null
-      this.banner = null
-      this.audioConfig = config
-      this.starter = Promise.resolve(true)
+      this.pid = -1
+      //this.banner = null
+      this.parser = null
+      //this.frameConfig = config
+      this.readable = false
+      this.needsReadable = false
       this.failCounter = new FailCounter(3, 10000)
       this.failCounter.on('exceedLimit', this._failLimitExceeded.bind(this))
       this.failed = false
       this.readableListener = this._readableListener.bind(this)
-      this.writeQueue = []
     }
 
-    util.inherits(AudioConsumer, EventEmitter)
+    util.inherits(FrameProducer, EventEmitter)
 
-    AudioConsumer.STATE_STOPPED = 1
-    AudioConsumer.STATE_STARTING = 2
-    AudioConsumer.STATE_STARTED = 3
-    AudioConsumer.STATE_STOPPING = 4
+    FrameProducer.STATE_STOPPED = 1
+    FrameProducer.STATE_STARTING = 2
+    FrameProducer.STATE_STARTED = 3
+    FrameProducer.STATE_STOPPING = 4
 
-    AudioConsumer.prototype._queueWrite = function(writer) {
-      switch (this.runningState) {
-      case AudioConsumer.STATE_STARTED:
-        writer.call(this)
-        break
-      default:
-        this.writeQueue.push(writer)
-        break
-      }
-    }
-
-    AudioConsumer.prototype.audioDown = function(point) {
-      this._queueWrite(function() {
-        return this._write(util.format(
-          'd %s %s %s %s\n'
-        , point.contact
-        , Math.floor(this.audioConfig.origin.x(point) * this.banner.maxX)
-        , Math.floor(this.audioConfig.origin.y(point) * this.banner.maxY)
-        , Math.floor((point.pressure || 0.5) * this.banner.maxPressure)
-        ))
-      })
-    }
-
-    AudioConsumer.prototype.audioMove = function(point) {
-      this._queueWrite(function() {
-        return this._write(util.format(
-          'm %s %s %s %s\n'
-        , point.contact
-        , Math.floor(this.audioConfig.origin.x(point) * this.banner.maxX)
-        , Math.floor(this.audioConfig.origin.y(point) * this.banner.maxY)
-        , Math.floor((point.pressure || 0.5) * this.banner.maxPressure)
-        ))
-      })
-    }
-
-    AudioConsumer.prototype.audioUp = function(point) {
-      this._queueWrite(function() {
-        return this._write(util.format(
-          'u %s\n'
-        , point.contact
-        ))
-      })
-    }
-
-    AudioConsumer.prototype.audioCommit = function() {
-      this._queueWrite(function() {
-        return this._write('c\n')
-      })
-    }
-
-    AudioConsumer.prototype.audioReset = function() {
-      this._queueWrite(function() {
-        return this._write('r\n')
-      })
-    }
-
-    AudioConsumer.prototype.tap = function(point) {
-      this.audioDown(point)
-      this.audioCommit()
-      this.audioUp(point)
-      this.audioCommit()
-    }
-
-    AudioConsumer.prototype._ensureState = function() {
+    FrameProducer.prototype._ensureState = function() {
       if (this.desiredState.empty()) {
         return
       }
@@ -121,18 +60,21 @@ module.exports = syrup.serial()
       }
 
       switch (this.runningState) {
-      case AudioConsumer.STATE_STARTING:
-      case AudioConsumer.STATE_STOPPING:
+      case FrameProducer.STATE_STARTING:
+      case FrameProducer.STATE_STOPPING:
         // Just wait.
         break
-      case AudioConsumer.STATE_STOPPED:
-        if (this.desiredState.next() === AudioConsumer.STATE_STARTED) {
-          this.runningState = AudioConsumer.STATE_STARTING
-          this.starter = this._startService().bind(this)
+      case FrameProducer.STATE_STOPPED:
+        if (this.desiredState.next() === FrameProducer.STATE_STARTED) {
+          this.runningState = FrameProducer.STATE_STARTING
+          this._startService().bind(this)
             .then(function(out) {
               this.output = new RiskyStream(out)
                 .on('unexpectedEnd', this._outputEnded.bind(this))
               return this._readOutput(this.output.stream)
+            })
+            .then(function() {
+              return this._waitForPid()
             })
             .then(function() {
               return this._connectService()
@@ -140,17 +82,14 @@ module.exports = syrup.serial()
             .then(function(socket) {
               this.socket = new RiskyStream(socket)
                 .on('unexpectedEnd', this._socketEnded.bind(this))
-              return this._readBanner(this.socket.stream)
-            })
-            .then(function(banner) {
-              this.banner = banner
-              return this._readUnexpected(this.socket.stream)
-            })
-            .then(function() {
-              this._processWriteQueue()
+              //return this._readBanner(this.socket.stream)
+            //})
+            //.then(function(banner) {
+              //this.banner = banner
+              return this._readFrames(this.socket.stream)
             })
             .then(function() {
-              this.runningState = AudioConsumer.STATE_STARTED
+              this.runningState = FrameProducer.STATE_STARTED
               this.emit('start')
             })
             .catch(Promise.CancellationError, function() {
@@ -170,9 +109,9 @@ module.exports = syrup.serial()
           setImmediate(this._ensureState.bind(this))
         }
         break
-      case AudioConsumer.STATE_STARTED:
-        if (this.desiredState.next() === AudioConsumer.STATE_STOPPED) {
-          this.runningState = AudioConsumer.STATE_STOPPING
+      case FrameProducer.STATE_STARTED:
+        if (this.desiredState.next() === FrameProducer.STATE_STOPPED) {
+          this.runningState = FrameProducer.STATE_STOPPING
           this._stop().finally(function() {
             this._ensureState()
           })
@@ -184,47 +123,80 @@ module.exports = syrup.serial()
       }
     }
 
-    AudioConsumer.prototype.start = function() {
-      log.info('Requesting audio consumer to start')
-      this.desiredState.push(AudioConsumer.STATE_STARTED)
+    FrameProducer.prototype.start = function() {
+      // log.info('Requesting frame producer to start')
+      this.desiredState.push(FrameProducer.STATE_STARTED)
       this._ensureState()
     }
 
-    AudioConsumer.prototype.stop = function() {
-      log.info('Requesting audio consumer to stop')
-      this.desiredState.push(AudioConsumer.STATE_STOPPED)
+    FrameProducer.prototype.stop = function() {
+      // log.info('Requesting frame producer to stop')
+      this.desiredState.push(FrameProducer.STATE_STOPPED)
       this._ensureState()
     }
 
-    AudioConsumer.prototype.restart = function() {
+    FrameProducer.prototype.restart = function() {
       switch (this.runningState) {
-      case AudioConsumer.STATE_STARTED:
-      case AudioConsumer.STATE_STARTING:
-        this.starter.cancel()
-        this.desiredState.push(AudioConsumer.STATE_STOPPED)
-        this.desiredState.push(AudioConsumer.STATE_STARTED)
+      case FrameProducer.STATE_STARTED:
+      case FrameProducer.STATE_STARTING:
+        this.desiredState.push(FrameProducer.STATE_STOPPED)
+        this.desiredState.push(FrameProducer.STATE_STARTED)
         this._ensureState()
         break
       }
     }
 
-    AudioConsumer.prototype._configChanged = function() {
+    FrameProducer.prototype.nextFrame = function() {
+      var frame = null
+      var chunk
+
+      chunk = this.socket.stream.read()
+      if (chunk) {
+        log.info("------------------------------------------------------------------true", chunk)
+      }
+      else {
+        log.info("------------------------------------------------------------------false", )
+        // break
+      }
+
+      // if (this.parser) {
+      //   while ((frame = this.parser.nextFrame()) === null) {
+      //     chunk = this.socket.stream.read()
+      //     if (chunk) {
+      //       this.parser.push(chunk)
+      //     }
+      //     else {
+      //       this.readable = false
+      //       break
+      //     }
+      //   }
+      // }
+      return chunk
+      // return this.socket.stream.read(8)
+    }
+
+    FrameProducer.prototype.needFrame = function() {
+      this.needsReadable = true
+      this._maybeEmitReadable()
+    }
+
+    FrameProducer.prototype._configChanged = function() {
       this.restart()
     }
 
-    AudioConsumer.prototype._socketEnded = function() {
+    FrameProducer.prototype._socketEnded = function() {
       log.warn('Connection to miniaudio ended unexpectedly')
       this.failCounter.inc()
       this.restart()
     }
 
-    AudioConsumer.prototype._outputEnded = function() {
+    FrameProducer.prototype._outputEnded = function() {
       log.warn('Shell keeping miniaudio running ended unexpectedly')
       this.failCounter.inc()
       this.restart()
     }
 
-    AudioConsumer.prototype._failLimitExceeded = function(limit, time) {
+    FrameProducer.prototype._failLimitExceeded = function(limit, time) {
       this._stop()
       this.failed = true
       this.emit('error', new Error(util.format(
@@ -234,13 +206,13 @@ module.exports = syrup.serial()
       )))
     }
 
-    AudioConsumer.prototype._startService = function() {
-      log.info('Launching audio service')
+    FrameProducer.prototype._startService = function() {
+      // log.info('Launching screen service')
       return miniaudio.run()
         .timeout(10000)
     }
 
-    AudioConsumer.prototype._readOutput = function(out) {
+    FrameProducer.prototype._readOutput = function(out) {
       out.pipe(split()).on('data', function(line) {
         var trimmed = line.toString().trim()
 
@@ -253,11 +225,32 @@ module.exports = syrup.serial()
           return lifecycle.fatal()
         }
 
+        var match = /^PID: (\d+)$/.exec(line)
+        if (match) {
+          this.pid = Number(match[1])
+          this.emit('pid', this.pid)
+        }
+
         log.info('miniaudio says: "%s"', line)
-      })
+      }.bind(this))
     }
 
-    AudioConsumer.prototype._connectService = function() {
+    FrameProducer.prototype._waitForPid = function() {
+      if (this.pid > 0) {
+        return Promise.resolve(this.pid)
+      }
+
+      var pidListener
+      return new Promise(function(resolve) {
+          this.on('pid', pidListener = resolve)
+        }.bind(this)).bind(this)
+        .timeout(2000)
+        .finally(function() {
+          this.removeListener('pid', pidListener)
+        })
+    }
+
+    FrameProducer.prototype._connectService = function() {
       function tryConnect(times, delay) {
         return adb.openLocal(options.serial, 'localabstract:miniaudio')
           .timeout(10000)
@@ -275,38 +268,38 @@ module.exports = syrup.serial()
           })
       }
       log.info('Connecting to miniaudio service')
-      // SH-03G can be very slow to start sometimes. Make sure we try long
-      // enough.
-      return tryConnect(7, 100)
+      return tryConnect(5, 100)
     }
 
-    AudioConsumer.prototype._stop = function() {
+    FrameProducer.prototype._stop = function() {
       return this._disconnectService(this.socket).bind(this)
         .timeout(2000)
         .then(function() {
           return this._stopService(this.output).timeout(10000)
         })
         .then(function() {
-          this.runningState = AudioConsumer.STATE_STOPPED
+          this.runningState = FrameProducer.STATE_STOPPED
           this.emit('stop')
         })
         .catch(function(err) {
           // In practice we _should_ never get here due to _stopService()
           // being quite aggressive. But if we do, well... assume it
           // stopped anyway for now.
-          this.runningState = AudioConsumer.STATE_STOPPED
+          this.runningState = FrameProducer.STATE_STOPPED
           this.emit('error', err)
           this.emit('stop')
         })
         .finally(function() {
           this.output = null
           this.socket = null
-          this.banner = null
+          this.pid = -1
+          //this.banner = null
+          this.parser = null
         })
     }
 
-    AudioConsumer.prototype._disconnectService = function(socket) {
-      log.info('Disconnecting from miniaudio service')
+    FrameProducer.prototype._disconnectService = function(socket) {
+      // log.info('Disconnecting from miniaudio service')
 
       if (!socket || socket.ended) {
         return Promise.resolve(true)
@@ -328,18 +321,18 @@ module.exports = syrup.serial()
         })
     }
 
-    AudioConsumer.prototype._stopService = function(output) {
-      log.info('Stopping miniaudio service')
+    FrameProducer.prototype._stopService = function(output) {
+      // log.info('Stopping miniaudio service')
 
       if (!output || output.ended) {
         return Promise.resolve(true)
       }
 
-      var pid = this.banner ? this.banner.pid : -1
+      var pid = this.pid
 
       function kill(signal) {
         if (pid <= 0) {
-          return Promise.reject(new Error('Miniaudio service pid is unknown'))
+          return Promise.reject(new Error('miniaudio service pid is unknown'))
         }
 
         var signum = {
@@ -347,7 +340,7 @@ module.exports = syrup.serial()
         , SIGKILL: -9
         }[signal]
 
-        log.info('Sending %s to miniaudio', signal)
+        // log.info('Sending %s to miniaudio %s %s %s', signal, 'kill', signum, pid)
         return Promise.all([
             output.waitForEnd()
           , adb.shell(options.serial, ['kill', signum, pid])
@@ -366,7 +359,7 @@ module.exports = syrup.serial()
       }
 
       function forceEnd() {
-        log.info('Ending miniaudio I/O as a last resort')
+        // log.info('Ending miniaudio I/O as a last resort')
         output.end()
         return Promise.resolve(true)
       }
@@ -376,197 +369,205 @@ module.exports = syrup.serial()
         .catch(forceEnd)
     }
 
-    AudioConsumer.prototype._readBanner = function(socket) {
-      log.info('Reading miniaudio banner')
+    // FrameProducer.prototype._readBanner = function(socket) {
+    //   // log.info('Reading miniaudio banner')
+    //   return bannerutil.read(socket).timeout(2000)
+    // }
 
-      var parser = new Parser(socket)
-      var banner = {
-        pid: -1 // @todo
-      , version: 0
-      , maxContacts: 0
-      , maxX: 0
-      , maxY: 0
-      , maxPressure: 0
-      }
-
-      function readVersion() {
-        return parser.readLine()
-          .then(function(chunk) {
-            var args = chunk.toString().split(/ /g)
-            // switch (args[0]) {
-            //   case 'v':
-            //     banner.version = Number(args[1])
-            //     break
-            //   default:
-            //     throw new Error(util.format(
-            //       'Unexpected output "%s", expecting version line'
-            //     , chunk
-            //     ))
-            // }
-          })
-      }
-
-      function readLimits() {
-        return parser.readLine()
-          .then(function(chunk) {
-            var args = chunk.toString().split(/ /g)
-            // switch (args[0]) {
-            //   case '^':
-            //     banner.maxContacts = args[1]
-            //     banner.maxX = args[2]
-            //     banner.maxY = args[3]
-            //     banner.maxPressure = args[4]
-            //     break
-            //   default:
-            //     throw new Error(util.format(
-            //       'Unknown output "%s", expecting limits line'
-            //     , chunk
-            //     ))
-            // }
-          })
-      }
-
-      function readPid() {
-        return parser.readLine()
-          .then(function(chunk) {
-            var args = chunk.toString().split(/ /g)
-            // switch (args[0]) {
-            //   case '$':
-            //     banner.pid = Number(args[1])
-            //     break
-            //   default:
-            //     throw new Error(util.format(
-            //       'Unexpected output "%s", expecting pid line'
-            //     , chunk
-            //     ))
-            // }
-          })
-      }
-
-      return readVersion()
-        .then(readLimits)
-        .then(readPid)
-        .return(banner)
-        .timeout(2000)
-    }
-
-    AudioConsumer.prototype._readUnexpected = function(socket) {
+    FrameProducer.prototype._readFrames = function(socket) {
+      this.needsReadable = true
       socket.on('readable', this.readableListener)
 
-      // We may already have data pending.
+      // We may already have data pending. Let the user know they should
+      // at least attempt to read frames now.
       this.readableListener()
     }
 
-    AudioConsumer.prototype._readableListener = function() {
-      // var chunk
-
-      // while ((chunk = this.socket.stream.read())) {
-      //   log.warn('Unexpected output from miniaudio socket', chunk)
+    FrameProducer.prototype._maybeEmitReadable = function() {
+      // if (this.readable && this.needsReadable) {
+      //   this.needsReadable = false
+      //   this.emit('readable')
       // }
+      this.emit('readable')
     }
 
-    AudioConsumer.prototype._processWriteQueue = function() {
-      for (var i = 0, l = this.writeQueue.length; i < l; ++i) {
-        this.writeQueue[i].call(this)
-      }
-
-      this.writeQueue = []
+    FrameProducer.prototype._readableListener = function() {
+      this.readable = true
+      this._maybeEmitReadable()
     }
 
-    AudioConsumer.prototype._write = function(chunk) {
-      this.socket.stream.write(chunk)
-    }
+    function createServer() {
+      log.info('Starting Audio WebSocket server on port %d', audioOptions.publicPort)
 
-    function startConsumer() {
-      var audioConsumer = new AudioConsumer({
-        // Usually the audio origin is the same as the display's origin,
-        // but sometimes it might not be.
-        origin: (function(origin) {
-          log.info('Audio origin is %s', origin)
-          return {
-            'top left': {
-              x: function(point) {
-                return point.x
-              }
-            , y: function(point) {
-                return point.y
-              }
-            }
-            // So far the only device we've seen exhibiting this behavior
-            // is Yoga Tablet 8.
-          , 'bottom left': {
-              x: function(point) {
-                return 1 - point.y
-              }
-            , y: function(point) {
-                return point.x
-              }
-            }
-          }[origin]
-        })(flags.get('forceAudioOrigin', 'top left'))
+      var wss = new WebSocket.Server({
+        port: audioOptions.publicPort
+      , perMessageDeflate: false
       })
 
-      var startListener, errorListener
-
+      var listeningListener, errorListener
       return new Promise(function(resolve, reject) {
-        audioConsumer.on('start', startListener = function() {
-          resolve(audioConsumer)
+          listeningListener = function() {
+            return resolve(wss)
+          }
+
+          errorListener = function(err) {
+            return reject(err)
+          }
+
+          wss.on('listening', listeningListener)
+          wss.on('error', errorListener)
+        })
+        .finally(function() {
+          wss.removeListener('listening', listeningListener)
+          wss.removeListener('error', errorListener)
+        })
+    }
+
+    return createServer()
+      .then(function(wss) {
+        var frameProducer = new FrameProducer()
+        var broadcastSet = frameProducer.broadcastSet = new BroadcastSet()
+
+        broadcastSet.on('nonempty', function() {
+          frameProducer.start()
         })
 
-        audioConsumer.on('error', errorListener = reject)
+        broadcastSet.on('empty', function() {
+          frameProducer.stop()
+        })
 
-        audioConsumer.start()
-      })
-      .finally(function() {
-        audioConsumer.removeListener('start', startListener)
-        audioConsumer.removeListener('error', errorListener)
-      })
-    }
+        broadcastSet.on('insert', function(id) {
+          // If two clients join a session in the middle, one of them
+          // may not release the initial size because the projection
+          // doesn't necessarily change, and the producer doesn't Getting
+          // restarted. Therefore we have to call onStart() manually
+          // if the producer is already up and running.
+          switch (frameProducer.runningState) {
+          case FrameProducer.STATE_STARTED:
+            broadcastSet.get(id).onStart(frameProducer)
+            break
+          }
+        })
 
-    return startConsumer()
-      .then(function(audioConsumer) {
-        var queue = new SeqQueue(100, 4)
+        frameProducer.on('start', function() {
+          broadcastSet.keys().map(function(id) {
+            return broadcastSet.get(id).onStart(frameProducer)
+          })
+        })
 
-        audioConsumer.on('error', function(err) {
-          log.fatal('Audio consumer had an error', err.stack)
+        frameProducer.on('readable', function next() {
+          var frame = frameProducer.nextFrame()
+          console.log('frame: ' + frame)
+          if (frame) {
+            // return broadcastSet.get(id).onFrame(frame)
+            Promise.settle([broadcastSet.keys().map(function(id) {
+              log.info('--------------------------------------------------------[id]:', id)
+              return broadcastSet.get(id).onFrame(frame)
+            })])//.then(next)
+          }
+          // else {
+          //   frameProducer.needFrame()
+          // }
+        })
+
+        frameProducer.on('error', function(err) {
+          log.fatal('Frame producer had an error', err.stack)
           lifecycle.fatal()
         })
 
-        router
-          .on(wire.AudioCaptureMessage, function(channel, message) {
-            queue.start(message.seq)
-          })
-          // .on(wire.GestureStopMessage, function(channel, message) {
-          //   queue.push(message.seq, function() {
-          //     queue.stop()
-          //   })
-          // })
-          // .on(wire.AudioDownMessage, function(channel, message) {
-          //   queue.push(message.seq, function() {
-          //     audioConsumer.audioDown(message)
-          //   })
-          // })
-          // .on(wire.AudioMoveMessage, function(channel, message) {
-          //   queue.push(message.seq, function() {
-          //     audioConsumer.audioMove(message)
-          //   })
-          // })
-          // .on(wire.AudioUpMessage, function(channel, message) {
-          //   queue.push(message.seq, function() {
-          //     audioConsumer.audioUp(message)
-          //   })
-          // })
-          // .on(wire.AudioCommitMessage, function(channel, message) {
-          //   queue.push(message.seq, function() {
-          //     audioConsumer.audioCommit()
-          //   })
-          // })
-          // .on(wire.AudioResetMessage, function(channel, message) {
-          //   queue.push(message.seq, function() {
-          //     audioConsumer.audioReset()
-          //   })
-          // })
+        wss.on('connection', function(ws) {
+          var id = uuid.v4()
+          var pingTimer
+          log.info('------------------------------------------------------------------------id', id)
+          function send(message, options) {
+            // log.info('====================' + message + '++++' + options)
+            return new Promise(function(resolve, reject) {
+              switch (ws.readyState) {
+              case WebSocket.OPENING:
+                // This should never happen.
+                log.warn('Unable to send to OPENING client "%s"', id)
+                break
+              case WebSocket.OPEN:
+                // This is what SHOULD happen.
+                ws.send(message, options, function(err) {
+                  return err ? reject(err) : resolve()
+                })
+                break
+              case WebSocket.CLOSING:
+                // Ok, a 'close' event should remove the client from the set
+                // soon.
+                break
+              case WebSocket.CLOSED:
+                // This should never happen.
+                log.warn('Unable to send to CLOSED client "%s"', id)
+                clearInterval(pingTimer)
+                broadcastSet.remove(id)
+                break
+              }
+            })
+          }
 
-        return audioConsumer
+          function wsStartNotifier() {
+            // return send(util.format(
+            //   'start %s'
+            // , JSON.stringify(frameProducer.banner)
+            // ))
+            return send('start')
+          }
+
+          function wsPingNotifier() {
+            // log.info('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+            return send('ping')
+          }
+
+          function wsFrameNotifier(frame) {
+            
+            log.info('send:--------------------------' + frame)
+            return send(frame)
+            // return send(frame, {
+            //   binary: true
+            // })
+          }
+
+          // Sending a ping message every now and then makes sure that
+          // reverse proxies like nginx don't time out the connection [1].
+          //
+          // [1] http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout
+          pingTimer = setInterval(wsPingNotifier, options.screenPingInterval)
+
+          ws.on('message', function(data) {
+            log.info('*******audio data:--------------------------' + data)
+            var match = /^(on|off)$/.exec(data)
+            if (match) {
+              switch (match[2] || match[1]) {
+              case 'on':
+                broadcastSet.insert(id, {
+                  onStart: wsStartNotifier
+                , onFrame: wsFrameNotifier
+                })
+                break
+              case 'off':
+                broadcastSet.remove(id)
+                // Keep pinging even when the screen is off.
+                break
+              }
+            }
+          })
+
+          ws.on('close', function() {
+            clearInterval(pingTimer)
+            broadcastSet.remove(id)
+          })
+        })
+
+        lifecycle.observe(function() {
+          wss.close()
+        })
+
+        lifecycle.observe(function() {
+          frameProducer.stop()
+        })
+
+        return frameProducer
       })
   })

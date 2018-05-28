@@ -2,6 +2,8 @@ module.exports.command = 'provider [serial..]'
 
 module.exports.describe = 'Start a provider unit.'
 
+process.debugPort += 20
+
 module.exports.builder = function(yargs) {
   var os = require('os')
   var ip = require('my-local-ip')
@@ -195,6 +197,13 @@ module.exports.handler = function(argv) {
       .concat(argv.lockRotation ? ['--lock-rotation'] : [])
       .concat(!argv.cleanup ? ['--no-cleanup'] : [])
 
+          //
+    const isDebug = process.execArgv.join().includes('inspect')
+    if (isDebug){
+      process.debugPort++
+      process.execArgv = new Array('--inspect=' + process.debugPort)
+    }
+    //
       return fork(cli, args)
     }
   , endpoints: {

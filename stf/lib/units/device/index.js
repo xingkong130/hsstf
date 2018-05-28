@@ -19,6 +19,7 @@ module.exports = function(options) {
         .dependency(require('./plugins/heartbeat'))
         .dependency(require('./plugins/solo'))
         .dependency(require('./plugins/screen/stream'))
+        .dependency(require('./plugins/audio'))
         .dependency(require('./plugins/screen/capture'))
         .dependency(require('./plugins/vnc'))
         .dependency(require('./plugins/service'))
