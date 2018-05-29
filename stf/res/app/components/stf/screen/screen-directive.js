@@ -73,12 +73,14 @@ module.exports = function DeviceScreenDirective(
         }
 
         ws_audio.onmessage = function openListener(ev) {
-          var reader = new FileReader()
-          reader.readAsText(ev.data, 'utf-8')
-          reader.onload = function(e){
-            console.log('<><audio><>+++++++++++++++++++++++received: %s---%s---%s---%s', ev.data.toString(), ev.data, typeof(ev.data), reader.result)
 
-          }
+          console.log('<><audio><>+++++++++++++++++++++++received: %s', ev.data)
+          // var reader = new FileReader()
+          // reader.readAsText(ev.data, 'utf-8')
+          // reader.onload = function(e){
+          //   console.log('<><audio><>+++++++++++++++++++++++received: %s---%s---%s---%s', ev.data.toString(), ev.data, typeof(ev.data), reader.result)
+
+          // }
         }
         
         ws_audio.onerror = function errorListener() {
