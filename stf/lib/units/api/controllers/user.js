@@ -74,10 +74,6 @@ function userRegister(req, res) {
       , validationErrors: 'user name exsit'
       })
     } else if(data && data.inserted) {
-      //注册成功后直接绑定设备
-      dbapi.bindDevice({
-        userid: userid
-      })
       var token = jwtutil.encode({
       payload: {
             id: userid
