@@ -23,6 +23,7 @@ module.exports.encode = function(options) {
 
 module.exports.decode = function(payload, secret) {
   if (!jws.verify(payload, 'HS256', secret)) {
+    console.log('jwt invalid')
     return null
   }
 
@@ -31,9 +32,10 @@ module.exports.decode = function(payload, secret) {
       })
   var exp = decoded.header.exp
 
-  if (exp && exp <= Date.now()) {
-    return null
-  }
+  // if (exp && exp <= Date.now()) {
+  //   console.log('exp time out')
+  //   return null
+  // }
 
   return decoded.payload
 }

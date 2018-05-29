@@ -23,6 +23,13 @@ module.exports.fork = function(filename, args) {
   log.info('Forking "%s %s"', filename, args.join(' '))
 
   var resolver = Promise.defer()
+  //
+  const isDebug = process.execArgv.join().includes('inspect')
+  if (isDebug){
+    process.debugPort++
+    process.execArgv = new Array('--inspect=' + process.debugPort)
+  }
+  //
   var proc = cp.fork.apply(cp, arguments)
 
   function sigintListener() {

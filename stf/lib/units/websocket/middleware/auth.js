@@ -2,7 +2,7 @@ var dbapi = require('../../../db/api')
 
 module.exports = function(socket, next) {
   var req = socket.request
-  var token = req.session.jwt ? req.session.jwt : req.query.jwt
+  var token = req.jwt ? req.jwt : req.session.jwt
   if (token) {
     return dbapi.loadUser(token.id)
       .then(function(user) {
@@ -17,6 +17,7 @@ module.exports = function(socket, next) {
       .catch(next)
   }
   else {
+    console.log('Missing authorization token')
     next(new Error('Missing authorization token'))
   }
 }

@@ -28,8 +28,8 @@ module.exports = function(options) {
   var server = http.createServer()
   var io = socketio.listen(server, {
         serveClient: false
-      , transports: ['websocket']
       })
+      //, transports: ['websocket']
   var channelRouter = new events.EventEmitter()
 
   // Output
@@ -77,13 +77,14 @@ module.exports = function(options) {
   io.use(cookieSession({
     name: options.ssid
   , keys: [options.secret]
+  , secret: options.secret
   }))
 
-  io.use(ip({
-    trust: function() {
-      return true
-    }
-  }))
+  // io.use(ip({
+  //   trust: function() {
+  //     return true
+  //   }
+  // }))
 
   io.use(auth)
 
@@ -93,6 +94,7 @@ module.exports = function(options) {
     var channels = []
 
     user.ip = socket.handshake.query.uip || req.ip
+    console.log('connection, user.ip: ' + user.ip)
     socket.emit('socket.ip', user.ip)
 
     function joinChannel(channel) {
@@ -449,6 +451,8 @@ module.exports = function(options) {
         })
         // Touch events
         .on('input.touchDown', function(channel, data) {
+          console.log('touchDown')
+          console.log(data)
           push.send([
             channel
           , wireutil.envelope(new wire.TouchDownMessage(
@@ -910,6 +914,7 @@ module.exports = function(options) {
         })
     })
     .finally(function() {
+      log.info('ws connection finally')
       // Clean up all listeners and subscriptions
       channelRouter.removeListener(wireutil.global, messageListener)
       channels.forEach(function(channel) {
