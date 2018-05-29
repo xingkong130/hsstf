@@ -252,7 +252,8 @@ module.exports = syrup.serial()
 
     FrameProducer.prototype._connectService = function() {
       function tryConnect(times, delay) {
-        return adb.openLocal(options.serial, 'localabstract:miniaudio')
+        // return adb.openLocal(options.serial, 'localabstract:miniaudio')
+        return adb.openLocal(options.serial, 'tcp:1199')
           .timeout(10000)
           .then(function(out) {
             return out
