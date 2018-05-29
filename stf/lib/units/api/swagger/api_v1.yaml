@@ -43,6 +43,72 @@ paths:
             $ref: "#/definitions/ErrorResponse"
       security:
         - accessTokenAuth: []
+  /user/login:
+    x-swagger-router-controller: user
+    post:
+      summary: User login
+      description: User login.
+      operationId: userLogin
+      tags:
+        - user
+      parameters:
+        - name: user
+          in: body
+          description: User and password
+          required: true
+          schema:
+            $ref: "#/definitions/UserLogin"
+      responses:
+        "200":
+          description: User login sccuess
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/register:
+    x-swagger-router-controller: user
+    post:
+      summary: User register
+      description: User register.
+      operationId: userRegister
+      tags:
+        - user
+      parameters:
+        - name: user
+          in: body
+          description: User and password
+          required: true
+          schema:
+            $ref: "#/definitions/UserLogin"
+      responses:
+        "200":
+          description: User register sccuess
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/binddevice:
+    x-swagger-router-controller: user
+    post:
+      summary: User bind device
+      description: Bind a useable device for user.
+      operationId: bindUserDevice
+      tags:
+        - user
+      parameters:
+        - name: userid
+          in: body
+          description: User id
+          required: true
+          schema:
+            $ref: "#/definitions/UserID"
+      responses:
+        "200":
+          description: User bind device sccuess
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /user/devices:
     x-swagger-router-controller: user
     get:
@@ -272,6 +338,21 @@ definitions:
     properties:
       user:
         type: object
+  UserID:
+    required:
+      - userid
+    properties:
+      userid:
+        type: string
+  UserLogin:
+    required:
+      - name
+      - pwd
+    properties:
+      name:
+        type: string
+      pwd:
+        type: string
   AccessTokensResponse:
     required:
       - tokens

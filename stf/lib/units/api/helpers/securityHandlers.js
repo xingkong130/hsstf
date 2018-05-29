@@ -15,7 +15,7 @@ function accessTokenAuth(req, res, next) {
   if (req.headers.authorization) {
     var authHeader = req.headers.authorization.split(' ')
     var format = authHeader[0]
-    var tokenId = authHeader[1]
+    var jwt = authHeader[1]
 
     if (format !== 'Bearer') {
       return res.status(401).json({
@@ -24,7 +24,7 @@ function accessTokenAuth(req, res, next) {
       })
     }
 
-    if (!tokenId) {
+    if (!jwt) {
       log.error('Bad Access Token Header')
       return res.status(401).json({
         success: false
@@ -32,16 +32,16 @@ function accessTokenAuth(req, res, next) {
       })
     }
 
-    dbapi.loadAccessToken(tokenId)
-      .then(function(token) {
-        if (!token) {
-          return res.status(401).json({
-            success: false
-          , description: 'Bad Credentials'
-          })
-        }
+    //dbapi.loadAccessToken(tokenId)
+    //  .then(function(token) {
+        // if (!token) {
+        //   return res.status(401).json({
+        //     success: false
+        //   , description: 'Bad Credentials'
+        //   })
+        // }
 
-        var jwt = token.jwt
+        //var jwt = token.jwt
         var data = jwtutil.decode(jwt, req.options.secret)
 
         if (!data) {
@@ -64,14 +64,14 @@ function accessTokenAuth(req, res, next) {
           .catch(function(err) {
             log.error('Failed to load user: ', err.stack)
           })
-      })
-      .catch(function(err) {
-        log.error('Failed to load token: ', err.stack)
-        return res.status(401).json({
-          success: false
-        , description: 'Bad Credentials'
-        })
-      })
+      // })
+      // .catch(function(err) {
+      //   log.error('Failed to load token: ', err.stack)
+      //   return res.status(401).json({
+      //     success: false
+      //   , description: 'Bad Credentials'
+      //   })
+      // })
   }
   // Request is coming from browser app
   // TODO: Remove this once frontend become stateless

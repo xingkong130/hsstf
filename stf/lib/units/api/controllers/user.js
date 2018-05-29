@@ -2,12 +2,16 @@ var util = require('util')
 
 var _ = require('lodash')
 var Promise = require('bluebird')
+var crypto = require('crypto')
 var uuid = require('uuid')
+var url = require('url')
 
 var dbapi = require('../../../db/api')
 var logger = require('../../../util/logger')
 var datautil = require('../../../util/datautil')
 var deviceutil = require('../../../util/deviceutil')
+var jwtutil = require('../../../util/jwtutil')
+var urlutil = require('../../../util/urlutil')
 var wire = require('../../../wire')
 var wireutil = require('../../../wire/util')
 var wirerouter = require('../../../wire/router')
@@ -23,12 +27,156 @@ module.exports = {
 , remoteConnectUserDeviceBySerial: remoteConnectUserDeviceBySerial
 , remoteDisconnectUserDeviceBySerial: remoteDisconnectUserDeviceBySerial
 , getUserAccessTokens: getUserAccessTokens
+, userLogin: userLogin
+, userRegister: userRegister
+, bindUserDevice: bindUserDevice
 }
 
 function getUser(req, res) {
   res.json({
     success: true
   , user: req.user
+  })
+}
+
+function userRegister(req, res) {
+  var flag = false
+  if(!req.body.name)
+    flag = true
+  if(!req.body.pwd)
+    flag = true
+  if(flag) {
+    return res.status(400)
+      .json({
+        success: false
+      , error: 'ValidationError'
+      , validationErrors: 'name or password is empty'
+      })
+  }
+
+  var secret = 'pwd-secret'
+  var userid = uuid.v4().replace(/-/g, '')
+  var pwd = crypto.createHmac('sha1', secret)
+                  .update(req.body.pwd)
+                  .digest('hex')
+  dbapi.saveUserAfterRegister({
+    id: userid
+  , name: req.body.name
+  , pwd: pwd
+  , ip: req.ip
+  })
+  .then(function(data) {
+    if(data && data == 'name exsit') {
+      return res.status(400)
+      .json({
+        success: false
+      , error: 'ValidationError'
+      , validationErrors: 'user name exsit'
+      })
+    } else if(data && data.inserted) {
+      //注册成功后直接绑定设备
+      dbapi.bindDevice({
+        userid: userid
+      })
+      var token = jwtutil.encode({
+      payload: {
+            id: userid
+          , name: req.body.name
+        }
+      , secret: req.options.secret
+      , header: {
+          exp: Date.now() + 24 * 3600
+        }
+      })
+      return res.status(200)
+        .json({
+          success: true
+        , userid: userid
+        , jwt: token
+        })
+    } else {
+      return res.status(500)
+      .json({
+        success: false
+      , error: 'ServerError'
+      , validationErrors: 'register faild'
+      })
+    }
+  })
+  .catch(function(err) {
+    log.error('Unexpected error', err.stack)
+    res.status(500)
+      .json({
+        success: false
+      , error: 'ServerError'
+      })
+  })
+}
+
+function userLogin(req, res) {
+  var flag = false
+  if(!req.body.name)
+    flag = true
+  if(!req.body.pwd)
+    flag = true
+  if(flag) {
+    return res.status(400)
+      .json({
+        success: false
+      , error: 'ValidationError'
+      , validationErrors: 'name or password is empty'
+      })
+  }
+
+  var secret = 'pwd-secret'
+  var pwd = crypto.createHmac('sha1', secret)
+                  .update(req.body.pwd)
+                  .digest('hex')
+  dbapi.userLogin({
+    name: req.body.name
+  , pwd: pwd
+  })
+  .then(function(data){
+    if(data && util.isArray(data) && util.isString(data[0])) {
+      var userid = data[0]
+      dbapi.saveUserAfterLogin({
+        id: userid
+      , name: req.body.name
+      , ip: req.ip
+      })
+
+      var token = jwtutil.encode({
+      payload: {
+          id: userid
+          , name: req.body.name
+        }
+      , secret: req.options.secret
+      , header: {
+          exp: Date.now() + 24 * 3600
+        }
+      })
+      res.status(200)
+        .json({
+          success: true
+        , userid: userid
+        , jwt: token
+        })
+    } else {
+      return res.status(400)
+      .json({
+        success: false
+      , error: 'ValidationError'
+      , validationErrors: 'name not exsit or password error'
+      })
+    }
+  })
+  .catch(function(err) {
+    log.error('Unexpected error', err.stack)
+    res.status(500)
+      .json({
+        success: false
+      , error: 'ServerError'
+      })
   })
 }
 
@@ -399,4 +547,35 @@ function getUserAccessTokens(req, res) {
         success: false
       })
     })
+}
+
+/** 绑定设备
+   *  传入参数：userid-用户id
+   */
+function bindUserDevice(req, res){
+  var userid = req.body.userid
+  
+  dbapi.bindDevice({
+    userid: userid
+  })
+  .then(function(data) {
+    if(data && data.inserted) {
+      return res.json({
+          success: true
+        , description: 'Device successfully bind'
+        })
+    } else {
+      return res.status(500)
+      .json({
+        success: false
+      , description: 'Device bind failed'
+      })
+    }
+  })
+  .catch(function(err) {
+    log.error('Failed to bind device: "%s": ', userid, err.stack)
+    res.status(500).json({
+      success: false
+    })
+  })
 }
