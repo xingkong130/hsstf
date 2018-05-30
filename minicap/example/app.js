@@ -132,7 +132,7 @@ wss.on('connection', function (wsClient) {
         })
     }
 
-    var i_now_time = 0;
+    var i_last_time = 0;
     var i_sum = 0;
     var i_fps = 1;
     var i_bitsum = 0;
@@ -254,18 +254,19 @@ wss.on('connection', function (wsClient) {
                             i_num++;
 
                             i_sum++;
-                            if (getTime() >  i_now_time)
+                            var i_now_time = getTime();
+                            if (i_now_time >  i_last_time)
                             {
-                                i_now_time = getTime();
-                                console.log(getTime() + " " + i_sum + " " + i_bitsum / 1000);
-                                if (i_sum >= 10)
-                                    i_fps = parseInt(parseInt(i_sum) / 10);
-
+                                i_last_time = i_now_time;
+                                console.log(i_now_time + " "  + i_sum + " "  +  + i_bitsum / 1000);
+                                // if (i_sum >= 10)
+                                //     i_fps = parseInt(parseInt(i_sum) / 10);
+                                //
                                 i_sum = 0;
                                 i_bitsum = 0;
                             }
 
-                            if (i_num % i_fps == 0) {
+                            if (i_num % 2 == 0){
                                 i_bitsum +=frameBody.length;
                                 ws.send(frameBody, {
                                     binary: true
