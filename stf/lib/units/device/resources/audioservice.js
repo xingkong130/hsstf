@@ -14,21 +14,6 @@ module.exports = syrup.serial()
   .dependency(require('../support/abi'))
   .define(function(options, adb, abi) {
     var log = logger.createLogger('device:resources:audioservice')
-    var builder = ProtoBuf.loadProtoFile(
-      pathutil.vendor('AudioService/wire.proto'))
-
-    // var resource = {
-    //   requiredVersion: '2.1.0'
-    // , pkg: 'com.example.xiao.mymr'
-    // , main: 'jp.co.cyberagent.stf.Agent'
-    // , apk: pathutil.vendor('AudioService/AudioService.apk')
-    // , wire: builder.build().jp.co.cyberagent.stf.proto
-    // , builder: builder
-    // , startIntent: {
-    //     action: 'jp.co.cyberagent.stf.ACTION_START'
-    //   , component: 'jp.co.cyberagent.stf/.Service'
-    //   }
-    // }
 
     var resource = {
       pkg: 'com.example.xiao.mymr',
@@ -60,6 +45,7 @@ module.exports = syrup.serial()
       return getPath()
         .then(function(installedPath) {
           log.info('Running version check')
+          log.info('checking----------------------------------------------- : %s', util.format("export CLASSPATH='%s';" +" exec app_process /system/bin '%s' --version 2>/dev/null", installedPath, resource.main))
           return adb.shell(options.serial, util.format(
             "export CLASSPATH='%s';" +
             " exec app_process /system/bin '%s' --version 2>/dev/null"
@@ -72,6 +58,7 @@ module.exports = syrup.serial()
               .timeout(10000)
               .then(function(buffer) {
                 var version = buffer.toString()
+                log.info('version ---------------------------: ', version)
                 if (semver.satisfies(version, resource.requiredVersion)) {
                   return installedPath
                 }

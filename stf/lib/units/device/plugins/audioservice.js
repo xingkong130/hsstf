@@ -75,7 +75,7 @@ module.exports = syrup.serial()
                       .timeout(10000)
                       .then(function(line) {
                         throw new Error(util.format(
-                          'Service had an error: "%s"'
+                          'Service audio 1 had an error: "%s"'
                           , line
                         ))
                       })
@@ -86,7 +86,7 @@ module.exports = syrup.serial()
               }
               else {
                 throw new Error(util.format(
-                  'Service had an error: "%s"'
+                  'Service audio 2 had an error: "%s"'
                   , line
                 ))
               }
