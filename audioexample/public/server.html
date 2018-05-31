@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="jquery-1.11.1.min.js"></script>
+        <script src="aurora.js"></script>
+        <script src="aac.js"></script>
+        <script src="aurora-websocket.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+            	  //var player = AV.Player.fromURL('http://localhost:8080/test.aac');
+                //var miniAudioSocketClient = new WebSocket('ws://192.168.3.95:9002', 'miniaudio');
+                var player=AV.Player.fromWebSocket('ws://192.168.3.95:8500');
+                player.play();
+            });
+        </script>
+    </head>
+
+    <body>
+
+    </body>
+
+</html>
