@@ -7,6 +7,11 @@
 <canvas id="canvas" style="border: 3px black;" onclick="sendPressEvent(event)">
 </canvas>
 </body>
+
+<script src="../test/aurora.js"></script>
+<script src="../test/aac.js"></script>
+<script src="../test/aurora-websocket.min.js"></script>
+
 <script>
     /*jshint browser:true*/
     function getImage() {
@@ -79,12 +84,15 @@
         };
     }
 
+    function playAcc() {
+        //var player = AV.Player.fromURL('http://localhost:8080/test.aac');
+        var player = AV.Player.fromWebSocket('ws://localhost:8071/abcd123123');
+        player.play();
+    }
 
-
-
-
-    var miniCapSocketClient = new WebSocket('ws://192.168.0.4:9002', 'minicap');
-    // var miniCapSocketClient = new WebSocket('ws://192.168.0.4:9002', 'miniaudio');
-    var miniTouchSocketClient = new WebSocket('ws://192.168.0.4:9002', 'minitouch');
+    // playAcc();
+    var miniCapSocketClient = new WebSocket('ws://192.168.3.95:9002', 'minicap');
+    var miniAudioSocketClient = new WebSocket('ws://192.168.3.95:9002', 'miniaudio');
+    var miniTouchSocketClient = new WebSocket('ws://192.168.3.95:9002', 'minitouch');
     getImage();
 </script>

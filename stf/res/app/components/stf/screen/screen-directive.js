@@ -61,11 +61,12 @@ module.exports = function DeviceScreenDirective(
         console.log('--------------------------------------------------------------:' + device.display.screenUrl)
         // console.log('-----------------------------------------------------+++++++++:' + device.display + scope.device.display.url)
         console.log('-------audio-------------------------------------------------------:' + device.display.audioUrl)
-        
+      
         var ws_audio = new WebSocket(device.display.audioUrl)
-        // ws_audio.binaryType = 'blob'
+        ws_audio.binaryType = 'blob'
         
         ws_audio.onopen = function openListener() {
+          console.log('<><audio><>+++++++++++++++++++++++onopen')
           ws_audio.send('on')
           // return function messageListener(message) {
           //   console.log('received: %s', message.data)
@@ -73,20 +74,23 @@ module.exports = function DeviceScreenDirective(
         }
 
         ws_audio.onmessage = function openListener(ev) {
-          var reader = new FileReader()
-          reader.readAsText(ev.data, 'utf-8')
-          reader.onload = function(e){
-            console.log('<><audio><>+++++++++++++++++++++++received: %s---%s---%s---%s', ev.data.toString(), ev.data, typeof(ev.data), reader.result)
 
-          }
+          console.log('<><audio><>+++++++++++++++++++++++received: %s', ev.data)
+          // var reader = new FileReader()
+          // reader.readAsText(ev.data, 'utf-8')
+          // reader.onload = function(e){
+          //   console.log('<><audio><>+++++++++++++++++++++++received: %s---%s---%s---%s', ev.data.toString(), ev.data, typeof(ev.data), reader.result)
+          // }
         }
         
         ws_audio.onerror = function errorListener() {
           // @todo Handle
+          console.log('<><audio><>+++++++++++++++++++++++onerror')
         }
 
         ws_audio.onclose = function closeListener() {
           // @todo Maybe handle
+          console.log('<><audio><>+++++++++++++++++++++++onclose')
         }
 
         var ws = new WebSocket(device.display.screenUrl)

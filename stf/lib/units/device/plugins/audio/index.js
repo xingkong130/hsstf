@@ -152,10 +152,10 @@ module.exports = syrup.serial()
 
       chunk = this.socket.stream.read()
       if (chunk) {
-        log.info("------------------------------------------------------------------true", chunk)
+        // log.info("------------------------------------------------------------------true", chunk)
       }
       else {
-        log.info("------------------------------------------------------------------false", )
+        // log.info("------------------------------------------------------------------false", )
         // break
       }
 
@@ -252,7 +252,8 @@ module.exports = syrup.serial()
 
     FrameProducer.prototype._connectService = function() {
       function tryConnect(times, delay) {
-        return adb.openLocal(options.serial, 'localabstract:miniaudio')
+        // return adb.openLocal(options.serial, 'localabstract:miniaudio')
+        return adb.openLocal(options.serial, 'tcp:1199')
           .timeout(10000)
           .then(function(out) {
             return out
@@ -457,11 +458,10 @@ module.exports = syrup.serial()
 
         frameProducer.on('readable', function next() {
           var frame = frameProducer.nextFrame()
-          console.log('frame: ' + frame)
+          // console.log('frame: ' + frame)
           if (frame) {
             // return broadcastSet.get(id).onFrame(frame)
             Promise.settle([broadcastSet.keys().map(function(id) {
-              //log.info('--------------------------------------------------------[id]:', id)
               return broadcastSet.get(id).onFrame(frame)
             })])//.then(next)
           }
@@ -478,7 +478,6 @@ module.exports = syrup.serial()
         wss.on('connection', function(ws) {
           var id = uuid.v4()
           var pingTimer
-          //log.info('------------------------------------------------------------------------id', id)
           function send(message, options) {
             // log.info('====================' + message + '++++' + options)
             return new Promise(function(resolve, reject) {
@@ -516,13 +515,12 @@ module.exports = syrup.serial()
           }
 
           function wsPingNotifier() {
-            // log.info('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+            // // log.info('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
             return send('ping')
           }
 
           function wsFrameNotifier(frame) {
-            
-            //log.info('send:--------------------------' + frame)
+ 
             return send(frame)
             // return send(frame, {
             //   binary: true
@@ -536,7 +534,7 @@ module.exports = syrup.serial()
           pingTimer = setInterval(wsPingNotifier, options.screenPingInterval)
 
           ws.on('message', function(data) {
-            log.info('*******audio data:--------------------------' + data)
+            // log.info('*******audio data:--------------------------' + data)
             var match = /^(on|off)$/.exec(data)
             if (match) {
               switch (match[2] || match[1]) {
