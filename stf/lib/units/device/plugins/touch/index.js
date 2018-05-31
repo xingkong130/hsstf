@@ -474,6 +474,7 @@ module.exports = syrup.serial()
     }
 
     TouchConsumer.prototype._write = function(chunk) {
+      log.info('Touch chunk--->', chunk)
       this.socket.stream.write(chunk)
     }
 
@@ -534,34 +535,41 @@ module.exports = syrup.serial()
 
         router
           .on(wire.GestureStartMessage, function(channel, message) {
+            log.fatal('GestureStartMessage',channel,message)
             queue.start(message.seq)
           })
           .on(wire.GestureStopMessage, function(channel, message) {
+            log.fatal('GestureStopMessage',channel,message)
             queue.push(message.seq, function() {
               queue.stop()
             })
           })
           .on(wire.TouchDownMessage, function(channel, message) {
+            log.fatal('TouchDownMessage',channel,message)
             queue.push(message.seq, function() {
               touchConsumer.touchDown(message)
             })
           })
           .on(wire.TouchMoveMessage, function(channel, message) {
+            log.fatal('TouchMoveMessage',channel,message)
             queue.push(message.seq, function() {
               touchConsumer.touchMove(message)
             })
           })
           .on(wire.TouchUpMessage, function(channel, message) {
+            log.fatal('TouchUpMessage',channel,message)
             queue.push(message.seq, function() {
               touchConsumer.touchUp(message)
             })
           })
           .on(wire.TouchCommitMessage, function(channel, message) {
+            log.fatal('TouchCommitMessage',channel,message)
             queue.push(message.seq, function() {
               touchConsumer.touchCommit()
             })
           })
           .on(wire.TouchResetMessage, function(channel, message) {
+            log.fatal('TouchResetMessage',channel,message)
             queue.push(message.seq, function() {
               touchConsumer.touchReset()
             })

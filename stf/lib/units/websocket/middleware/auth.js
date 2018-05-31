@@ -2,6 +2,7 @@ var dbapi = require('../../../db/api')
 
 module.exports = function(socket, next) {
   var req = socket.request
+  // console.log(req)
   var token = req.jwt ? req.jwt : req.session.jwt
   if (token) {
     return dbapi.loadUser(token.id)

@@ -5,7 +5,7 @@ var validator = require('express-validator')
 var cookieSession = require('cookie-session')
 var bodyParser = require('body-parser')
 var serveStatic = require('serve-static')
-var csrf = require('csurf')
+// var csrf = require('csurf')
 var Promise = require('bluebird')
 var basicAuth = require('basic-auth')
 var crypto = require('crypto')
@@ -71,16 +71,16 @@ module.exports = function(options) {
   , keys: [options.secret]
   }))
   app.use(bodyParser.json())
-  app.use(csrf())
+  // app.use(csrf())
   app.use(validator())
   app.use('/static/bower_components',
     serveStatic(pathutil.resource('bower_components')))
   app.use('/static/auth/mock', serveStatic(pathutil.resource('auth/mock')))
 
-  app.use(function(req, res, next) {
-    res.cookie('XSRF-TOKEN', req.csrfToken())
-    next()
-  })
+  // app.use(function(req, res, next) {
+    // res.cookie('XSRF-TOKEN', req.csrfToken())
+    // next()
+  // })
 
   if (options.mock.useBasicAuth) {
     app.use(basicAuthMiddleware)
@@ -213,9 +213,9 @@ module.exports = function(options) {
                 })
               } else if(data && data.inserted) {
                 //注册成功后直接绑定设备
-                dbapi.bindDevice({
-                  userid: userid
-                })
+                // dbapi.bindDevice({
+                //   userid: userid
+                // })
                 var token = jwtutil.encode({
                 payload: {
                       id: userid
@@ -273,6 +273,9 @@ module.exports = function(options) {
    */
   app.post('/auth/api/v1/login', function(req, res) {
     var log = logger.createLogger('auth-mock')
+    // log.info("CPY------------->" + req.body())
+    log.info(("CPY------------->" + JSON.stringify(req.body)))
+
     log.setLocalIdentifier(req.ip)
     switch (req.accepts(['json'])) {
       case 'json':
@@ -280,17 +283,17 @@ module.exports = function(options) {
             req.checkBody('name').notEmpty()
             req.checkBody('pwd').notEmpty()
           })
-          .then(function() {
-            log.info('User login "%s"', req.body.name)
-            if(req.session.checkcode != req.body.checkcode) {
-              return res.status(400)
-                .json({
-                  success: false
-                , error: 'ValidationError'
-                , validationErrors: 'checkcode error'
-                })
-            }
-          })
+          // .then(function() {
+          //   log.info('User login "%s"', req.body.name)
+          //   if(req.session.checkcode != req.body.checkcode) {
+          //     return res.status(400)
+          //       .json({
+          //         success: false
+          //       , error: 'ValidationError'
+          //       , validationErrors: 'checkcode error'
+          //       })
+          //   }
+          // })
           .then(function() {
             var userid = uuid.v4().replaceAll('-', '')
             var secret = 'pwd-secret'
@@ -378,6 +381,7 @@ module.exports = function(options) {
               userid: req.body.userid
             })
             .then(function(data) {
+              log.info('CPY－－－－－－－－－》', data)
               if(data && data.inserted) {
                 return res.status(200)
                   .json({

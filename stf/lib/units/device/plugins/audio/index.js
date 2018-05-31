@@ -461,7 +461,7 @@ module.exports = syrup.serial()
           if (frame) {
             // return broadcastSet.get(id).onFrame(frame)
             Promise.settle([broadcastSet.keys().map(function(id) {
-              log.info('--------------------------------------------------------[id]:', id)
+              //log.info('--------------------------------------------------------[id]:', id)
               return broadcastSet.get(id).onFrame(frame)
             })])//.then(next)
           }
@@ -478,7 +478,7 @@ module.exports = syrup.serial()
         wss.on('connection', function(ws) {
           var id = uuid.v4()
           var pingTimer
-          log.info('------------------------------------------------------------------------id', id)
+          //log.info('------------------------------------------------------------------------id', id)
           function send(message, options) {
             // log.info('====================' + message + '++++' + options)
             return new Promise(function(resolve, reject) {
@@ -522,7 +522,7 @@ module.exports = syrup.serial()
 
           function wsFrameNotifier(frame) {
             
-            log.info('send:--------------------------' + frame)
+            //log.info('send:--------------------------' + frame)
             return send(frame)
             // return send(frame, {
             //   binary: true

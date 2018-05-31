@@ -451,8 +451,8 @@ module.exports = function(options) {
         })
         // Touch events
         .on('input.touchDown', function(channel, data) {
-          console.log('touchDown')
-          console.log(data)
+          // console.log('touchDown')
+          // console.log(data)
           push.send([
             channel
           , wireutil.envelope(new wire.TouchDownMessage(
@@ -530,6 +530,7 @@ module.exports = function(options) {
           ])
         })
         .on('display.rotate', function(channel, data) {
+          console.log('－－－－－－－CCCCCCC--------' + data.rotation)
           push.send([
             channel
           , wireutil.envelope(new wire.RotateMessage(
