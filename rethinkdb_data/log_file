@@ -1,0 +1,298 @@
+2018-05-31T13:44:35.349254180 3.762347s notice: Recursively removing directory /home/xiao/Desktop/hsstf/rethinkdb_data/tmp
+2018-05-31T13:44:35.368825404 3.781919s notice: Initializing directory /home/xiao/Desktop/hsstf/rethinkdb_data
+2018-05-31T13:44:35.368983736 3.782075s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/home/xiao/Desktop/hsstf/rethinkdb_data' did not already exist or is empty.)
+2018-05-31T13:44:35.369021930 3.782113s notice: Running rethinkdb 2.3.6~0trusty (GCC 4.8.2)...
+2018-05-31T13:44:35.371627852 3.784721s notice: Running on Linux 4.4.0-31-generic x86_64
+2018-05-31T13:44:35.371707579 3.784798s notice: Loading data from directory /home/xiao/Desktop/hsstf/rethinkdb_data
+2018-05-31T13:44:35.663609719 4.076701s info: Automatically using cache size of 2386 MB
+2018-05-31T13:44:35.664162595 4.077253s error: TCP socket creation failed for port 29015: Address already in use.
+2018-05-31T13:45:26.680617516 1.811366s notice: Running rethinkdb 2.3.6~0trusty (GCC 4.8.2)...
+2018-05-31T13:45:26.683830724 1.814580s notice: Running on Linux 4.4.0-31-generic x86_64
+2018-05-31T13:45:26.683974811 1.814719s notice: Loading data from directory /home/xiao/Desktop/hsstf/rethinkdb_data
+2018-05-31T13:45:26.766917335 1.897664s info: Automatically using cache size of 2392 MB
+2018-05-31T13:45:26.768070746 1.898815s error: TCP socket creation failed for port 29015: Address already in use.
+2018-05-31T13:46:24.994883406 2.257271s notice: Running rethinkdb 2.3.6~0trusty (GCC 4.8.2)...
+2018-05-31T13:46:24.998294717 2.260682s notice: Running on Linux 4.4.0-31-generic x86_64
+2018-05-31T13:46:24.998379517 2.260764s notice: Loading data from directory /home/xiao/Desktop/hsstf/rethinkdb_data
+2018-05-31T13:46:25.098032471 2.360418s info: Automatically using cache size of 2707 MB
+2018-05-31T13:46:25.098691332 2.361075s notice: Listening for intracluster connections on port 29015
+2018-05-31T13:46:25.099702436 2.362087s notice: Listening for client driver connections on port 28015
+2018-05-31T13:46:25.099845535 2.362230s notice: Listening for administrative HTTP connections on port 8080
+2018-05-31T13:46:25.099846446 2.362231s notice: Listening on cluster addresses: 127.0.0.1, 127.0.1.1, ::1
+2018-05-31T13:46:25.099847754 2.362232s notice: Listening on driver addresses: 127.0.0.1, 127.0.1.1, ::1
+2018-05-31T13:46:25.099850682 2.362235s notice: Listening on http addresses: 127.0.0.1, 127.0.1.1, ::1
+2018-05-31T13:46:25.099854506 2.362239s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2018-05-31T13:46:25.099857844 2.362242s notice: Server ready, "xiao_desktop_kj6" 81f6b276-6c79-413d-a191-960449414b2d
+2018-05-31T13:46:30.408803088 7.671188s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Starting a new Raft election for term 1.
+2018-05-31T13:46:30.426246952 7.688631s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Added replica on this server.
+2018-05-31T13:46:30.426258657 7.688643s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Starting a new Raft election for term 1.
+2018-05-31T13:46:30.426259355 7.688643s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Starting a new Raft election for term 1.
+2018-05-31T13:46:30.443883467 7.706268s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Added replica on this server.
+2018-05-31T13:46:30.443983471 7.706368s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Added replica on this server.
+2018-05-31T13:46:30.444025870 7.706410s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Starting a new Raft election for term 1.
+2018-05-31T13:46:30.444121143 7.706505s info: Table 8ff27440-0eb8-4227-b39d-bd6c0f97d050: Starting a new Raft election for term 1.
+2018-05-31T13:46:30.444227474 7.706612s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Starting a new Raft election for term 1.
+2018-05-31T13:46:30.445106130 7.707490s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Added replica on this server.
+2018-05-31T13:46:30.445245568 7.707630s info: Table 8ff27440-0eb8-4227-b39d-bd6c0f97d050: Added replica on this server.
+2018-05-31T13:46:30.445612270 7.707997s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Added replica on this server.
+2018-05-31T13:46:30.534307832 7.796692s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T13:46:30.534390131 7.796774s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T13:46:30.551853489 7.814238s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T13:46:30.551927230 7.814311s info: Table fd704315-99f3-499d-a0bf-941834922ef6: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T13:46:30.551953648 7.814338s info: Table 8ff27440-0eb8-4227-b39d-bd6c0f97d050: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T13:46:30.551999951 7.814384s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T13:46:32.007893082 9.270278s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:46:32.008255468 9.270640s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:46:32.009133625 9.271518s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:46:32.009434322 9.271819s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:46:32.029191396 9.291576s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:46:32.029443274 9.291827s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:46:32.029931996 9.292316s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:46:32.030325071 9.292709s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:46:32.030686325 9.293070s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T13:46:32.031349684 9.293734s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:46:32.032527639 9.294912s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:54:33.282854678 490.545239s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:54:33.283008039 490.545392s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:54:33.283409566 490.545794s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T13:54:33.283722278 490.546106s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:54:33.283927363 490.546311s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:54:33.284881013 490.547265s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:54:33.284945635 490.547330s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:54:33.285155997 490.547540s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:54:33.285318258 490.547702s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:54:33.287621814 490.550006s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:54:33.287629637 490.550014s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:54:43.392262827 500.654647s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:54:43.392389183 500.654773s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:54:43.393116365 500.655501s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T13:54:43.393955617 500.656340s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:54:43.393966825 500.656351s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:54:43.395434821 500.657819s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:54:43.395529758 500.657914s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:54:43.395573175 500.657957s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:54:43.395576981 500.657961s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:54:43.398918760 500.661303s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:54:43.398929818 500.661314s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:55:15.301719557 532.564105s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:55:15.301747092 532.564131s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:55:15.304753086 532.567137s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T13:55:15.304762948 532.567147s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:55:15.304765098 532.567149s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:55:15.304935250 532.567319s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:55:15.304990655 532.567375s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:55:15.305007023 532.567391s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:55:15.305009134 532.567393s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:55:15.307148594 532.569533s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:55:15.307155417 532.569539s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:55:53.115398776 570.377783s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:55:53.115767365 570.378152s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T13:55:53.116036202 570.378420s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T13:55:53.116321705 570.378706s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:55:53.116794271 570.379179s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T13:55:53.117654195 570.380038s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:55:53.117850446 570.380235s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:55:53.118125438 570.380510s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:55:53.118364807 570.380749s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T13:55:53.120365734 570.382750s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T13:55:53.120607320 570.382992s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T14:09:45.239926477 1402.502311s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T14:09:45.239937833 1402.502331s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T14:09:45.240683204 1402.503067s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T14:09:45.240791910 1402.503176s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T14:09:45.240796214 1402.503180s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T14:09:45.241784101 1402.504168s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:09:45.241788590 1402.504173s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:09:45.241984163 1402.504368s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:09:45.242405400 1402.504790s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:09:45.245549223 1402.507934s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T14:09:45.245611861 1402.507996s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T14:27:45.073913547 2482.336298s info: Table 9590dec7-b0b9-4623-b78a-e56c797456c5: Starting a new Raft election for term 1.
+2018-05-31T14:27:45.074009049 2482.336393s info: Table 9590dec7-b0b9-4623-b78a-e56c797456c5: Added replica on this server.
+2018-05-31T14:27:45.104374679 2482.366759s info: Table d8488c5e-2ab8-497e-993a-6a486addfddf: Starting a new Raft election for term 1.
+2018-05-31T14:27:45.121339763 2482.383724s info: Table f07eb7b4-e0d9-4544-9330-27ee2f63267a: Starting a new Raft election for term 1.
+2018-05-31T14:27:45.121351131 2482.383735s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: Starting a new Raft election for term 1.
+2018-05-31T14:27:45.138416942 2482.400801s info: Table d8488c5e-2ab8-497e-993a-6a486addfddf: Added replica on this server.
+2018-05-31T14:27:45.138583536 2482.400968s info: Table f07eb7b4-e0d9-4544-9330-27ee2f63267a: Added replica on this server.
+2018-05-31T14:27:45.138726224 2482.401110s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: Added replica on this server.
+2018-05-31T14:27:45.138842155 2482.401226s info: Table b6e8e46e-cf06-4ebf-a03e-02f3afef2b6c: Starting a new Raft election for term 1.
+2018-05-31T14:27:45.139092010 2482.401476s info: Table b6e8e46e-cf06-4ebf-a03e-02f3afef2b6c: Added replica on this server.
+2018-05-31T14:27:45.238480734 2482.500865s info: Table 9590dec7-b0b9-4623-b78a-e56c797456c5: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T14:27:45.238608647 2482.500993s info: Table d8488c5e-2ab8-497e-993a-6a486addfddf: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T14:27:45.256939849 2482.519325s info: Table f07eb7b4-e0d9-4544-9330-27ee2f63267a: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T14:27:45.257075957 2482.519460s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T14:27:45.257161913 2482.519546s info: Table b6e8e46e-cf06-4ebf-a03e-02f3afef2b6c: This server is Raft leader for term 1. Latest log index is 0.
+2018-05-31T14:27:46.636748691 2483.899133s info: Table 9590dec7-b0b9-4623-b78a-e56c797456c5: Configuration is changing.
+2018-05-31T14:27:46.737890637 2484.000275s info: Table b6e8e46e-cf06-4ebf-a03e-02f3afef2b6c: Configuration is changing.
+2018-05-31T14:27:46.738484077 2484.000868s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: Configuration is changing.
+2018-05-31T14:27:46.738631485 2484.001016s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: Configuration is changing.
+2018-05-31T14:27:46.739000698 2484.001385s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: Configuration is changing.
+2018-05-31T14:27:46.739300542 2484.001685s info: Table d8488c5e-2ab8-497e-993a-6a486addfddf: Configuration is changing.
+2018-05-31T14:27:46.739683142 2484.002067s info: Table d8488c5e-2ab8-497e-993a-6a486addfddf: Configuration is changing.
+2018-05-31T14:27:54.762657420 2492.025042s info: Table b6e8e46e-cf06-4ebf-a03e-02f3afef2b6c: Configuration is changing.
+2018-05-31T14:27:54.764567748 2492.026952s info: Table 9590dec7-b0b9-4623-b78a-e56c797456c5: Configuration is changing.
+2018-05-31T14:27:54.764704806 2492.027089s info: Table d8488c5e-2ab8-497e-993a-6a486addfddf: Configuration is changing.
+2018-05-31T14:27:54.764711330 2492.027095s info: Table d8488c5e-2ab8-497e-993a-6a486addfddf: Configuration is changing.
+2018-05-31T14:27:54.766455441 2492.028841s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: Configuration is changing.
+2018-05-31T14:27:54.766494690 2492.028879s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: Configuration is changing.
+2018-05-31T14:27:54.766499051 2492.028883s info: Table 061f5fe0-f33c-4a8b-8bd1-c6dc7b3dea15: Configuration is changing.
+2018-05-31T14:29:39.867047097 2597.129431s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T14:29:39.867065045 2597.129449s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T14:29:39.868833706 2597.131219s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T14:29:39.869004211 2597.131389s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T14:29:39.869007573 2597.131392s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T14:29:39.871532866 2597.133917s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:29:39.871547145 2597.133931s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:29:39.871558849 2597.133943s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:29:39.871560832 2597.133945s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:29:39.874139570 2597.136524s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T14:29:39.874147389 2597.136531s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T14:30:47.592701122 2664.855086s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T14:30:47.592710265 2664.855094s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T14:30:47.593227588 2664.855612s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T14:30:47.593312031 2664.855696s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T14:30:47.593402701 2664.855787s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T14:30:47.594655543 2664.857040s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:30:47.594667613 2664.857052s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:30:47.594769663 2664.857154s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:30:47.595074019 2664.857458s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T14:30:47.598265297 2664.860650s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T14:30:47.598276529 2664.860661s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:38:54.274479337 6751.536864s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:38:54.274637470 6751.537022s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:38:54.275680337 6751.538065s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T15:38:54.276620200 6751.539005s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:38:54.276693681 6751.539078s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:38:54.278604593 6751.540989s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:38:54.278708591 6751.541093s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:38:54.279034738 6751.541419s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:38:54.279567453 6751.541952s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:38:54.285656289 6751.548041s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:38:54.285675611 6751.548060s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:52:29.326113121 7566.588498s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:52:29.326191330 7566.588575s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:52:29.326817416 7566.589202s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T15:52:29.327043792 7566.589428s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:52:29.327170272 7566.589554s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:52:29.328123298 7566.590507s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:29.328130063 7566.590514s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:29.328351768 7566.590736s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:29.328616898 7566.591001s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:29.332350103 7566.594735s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:52:29.332368771 7566.594753s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:52:37.377046601 7574.639431s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:52:37.377153845 7574.639538s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:52:37.377695503 7574.640080s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T15:52:37.377965315 7574.640349s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:52:37.378217855 7574.640602s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:52:37.379370030 7574.641754s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:37.379378726 7574.641763s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:37.379508523 7574.641893s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:37.379818030 7574.642202s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:37.383955640 7574.646341s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:52:37.383979132 7574.646363s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:52:52.420641040 7589.683026s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:52:52.420952426 7589.683337s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:52:52.421196763 7589.683581s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T15:52:52.423576838 7589.685962s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:52:52.423593454 7589.685978s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:52:52.425477467 7589.687862s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:52.425507874 7589.687892s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:52.425511694 7589.687896s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:52.425514823 7589.687899s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:52:52.427747583 7589.690132s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:52:52.427755470 7589.690139s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:53:10.363238165 7607.625623s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:53:10.363546205 7607.625930s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:53:10.363863134 7607.626247s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T15:53:10.364070003 7607.626454s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:53:10.364516797 7607.626901s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:53:10.365253020 7607.627637s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:53:10.365462693 7607.627847s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:53:10.365739557 7607.628124s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:53:10.366016742 7607.628401s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:53:10.369546481 7607.631931s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:53:10.369684380 7607.632069s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:57:21.774366238 7859.036751s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:57:21.774385693 7859.036770s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:57:21.775025183 7859.037409s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T15:57:21.775091913 7859.037476s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:57:21.775320266 7859.037704s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:57:21.776305156 7859.038689s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:57:21.776356615 7859.038741s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:57:21.776415189 7859.038799s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:57:21.776667503 7859.039052s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:57:21.782003158 7859.044388s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:57:21.782014287 7859.044398s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:57:38.412135188 7875.674520s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:57:38.412143349 7875.674527s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T15:57:38.412704896 7875.675089s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T15:57:38.413029681 7875.675414s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:57:38.413035810 7875.675420s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T15:57:38.413591330 7875.675975s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:57:38.413803972 7875.676188s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:57:38.414123343 7875.676507s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:57:38.414428511 7875.676813s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T15:57:38.418459277 7875.680844s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T15:57:38.418472868 7875.680857s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T16:24:10.261349785 9467.523734s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T16:24:10.261370605 9467.523755s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T16:24:10.262006772 9467.524391s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T16:24:10.262089658 9467.524474s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T16:24:10.262235889 9467.524620s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T16:24:10.263694372 9467.526079s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T16:24:10.263708113 9467.526092s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T16:24:10.263792860 9467.526177s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T16:24:10.264001207 9467.526385s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T16:24:10.267305558 9467.529690s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T16:24:10.267317068 9467.529701s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T17:00:14.397874955 11631.660259s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T17:00:14.397946112 11631.660330s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T17:00:14.398406212 11631.660790s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T17:00:14.398601400 11631.660985s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T17:00:14.398760860 11631.661145s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T17:00:14.399753087 11631.662137s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T17:00:14.399759438 11631.662143s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T17:00:14.400047942 11631.662432s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T17:00:14.400221460 11631.662606s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T17:00:14.405098915 11631.667484s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T17:00:14.405121762 11631.667506s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T22:13:49.780797088 30447.565796s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T22:13:49.780878976 30447.565877s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T22:13:49.781451427 30447.566450s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T22:13:49.781632811 30447.566631s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T22:13:49.781817600 30447.566816s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T22:13:49.782768917 30447.567767s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:13:49.782776473 30447.567775s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:13:49.783006275 30447.568004s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:13:49.783173989 30447.568172s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:13:49.785743142 30447.570742s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T22:13:49.785756775 30447.570755s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T22:13:58.542747050 30456.327745s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T22:13:58.542767499 30456.327766s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T22:13:58.543588866 30456.328588s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T22:13:58.543700801 30456.328699s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T22:13:58.543705228 30456.328703s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T22:13:58.545705281 30456.330705s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:13:58.545773929 30456.330772s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:13:58.545778347 30456.330776s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:13:58.545849026 30456.330847s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:13:58.551478874 30456.336478s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T22:13:58.551494950 30456.336493s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T22:14:01.299872381 30459.084871s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T22:14:01.299883088 30459.084881s info: Table 483b5206-b2af-46ae-89e9-2a42e1d502da: Configuration is changing.
+2018-05-31T22:14:01.300524170 30459.085522s info: Table fa5f0d8e-b6e4-461b-8bcc-7ed826377cdb: Configuration is changing.
+2018-05-31T22:14:01.300588844 30459.085587s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T22:14:01.300646411 30459.085645s info: Table 650f136f-73e3-4a5a-8cea-c9131de29a45: Configuration is changing.
+2018-05-31T22:14:01.301626639 30459.086625s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:14:01.301631470 30459.086630s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:14:01.301733871 30459.086732s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:14:01.301995752 30459.086994s info: Table 0b50802d-d3a6-4d3b-a5f8-d26acab7b1b9: Configuration is changing.
+2018-05-31T22:14:01.306216801 30459.091216s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T22:14:01.306242120 30459.091240s info: Table fd704315-99f3-499d-a0bf-941834922ef6: Configuration is changing.
+2018-05-31T22:14:14.468066668 30472.253067s notice: Server got SIGTERM from pid 16800, uid 1000; shutting down...
+2018-05-31T22:14:14.468265001 30472.253263s notice: Shutting down client connections...
+2018-05-31T22:14:14.469042271 30472.254041s notice: All client connections closed.
+2018-05-31T22:14:14.469048881 30472.254047s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2018-05-31T22:14:14.501124918 30472.286125s notice: Storage engine shut down.
+2018-05-31T22:14:14.502807782 30472.287808s error: Failed to shutdown worker process: 'failed to send job function to worker'.  Killing it.

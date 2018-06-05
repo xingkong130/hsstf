@@ -1,0 +1,31 @@
+<html>
+    <head></head>
+    <body>
+        
+    </body>
+</html>
+
+<script>
+    var wsurl = 'ws://192.168.0.51:7412/';
+    var ws = new WebSocket(wsurl);
+        ws.binaryType = 'blob';
+
+    ws.onerror = function errorListener() {
+        // @todo Handle
+    }
+
+    ws.onclose = function closeListener() {
+        // @todo Maybe handle
+        
+    }
+
+    ws.onopen = function openListener() {
+        console.log('ws open');
+        ws.send('on');
+    }
+
+    ws.onmessage = function messageListener(message) {
+        console.log('message');
+        console.log(message);    
+    }
+</script>

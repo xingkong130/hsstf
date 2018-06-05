@@ -7,6 +7,9 @@ var uuid = require('uuid')
 var EventEmitter = require('eventemitter3')
 var split = require('split')
 var adbkit = require('adbkit')
+var CWebp = require('cwebp').CWebp
+var DWebp = require('cwebp').DWebp
+var fs = require('fs')
 
 var logger = require('../../../../util/logger')
 var lifecycle = require('../../../../util/lifecycle')
@@ -503,6 +506,7 @@ module.exports = syrup.serial()
         wss.on('connection', function(ws) {
           var id = uuid.v4()
           var pingTimer
+	  var index = 0
 
           function send(message, options) {
             return new Promise(function(resolve, reject) {
@@ -513,6 +517,10 @@ module.exports = syrup.serial()
                 break
               case WebSocket.OPEN:
                 // This is what SHOULD happen.
+		index++	
+		if(index % 3 == 0) {
+			break		
+		}
                 ws.send(message, options, function(err) {
                   return err ? reject(err) : resolve()
                 })
@@ -537,16 +545,39 @@ module.exports = syrup.serial()
             , JSON.stringify(frameProducer.banner)
             ))
           }
-
+		
           function wsPingNotifier() {
             return send('ping')
           }
 
           function wsFrameNotifier(frame) {
-            return send(frame, {
-              binary: true
-            })
+		jpg2webp(frame)
+		//.then(function(webp) {
+			//console.log('jpg2webp')
+			//console.log(webp)
+		    return send(frame, {
+		      binary: true
+		    })
+		//})
           }
+	function jpg2webp(frame) {
+		//fs.writeFile('../images/'+(new Date()).toString() +'.jpg', frame, function(err){
+		//	if(err) console.log('fs write file err: '+err)
+		//})
+
+		//var encoder = new CWebp(frame)
+		//console.log(encoder)
+		//encoder.write('image.webp', function(err){
+		//	console.log(err || 'jpg2webp success')		
+		//})
+		
+		//var decoder = new DWebp(frame)
+		//decoder.toBuffer(function(err, buffer){
+		//	console.log(err)	
+		//	console.log(buffer)	
+		//})
+	}
+
 
           // Sending a ping message every now and then makes sure that
           // reverse proxies like nginx don't time out the connection [1].
