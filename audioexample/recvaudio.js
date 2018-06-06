@@ -24,7 +24,8 @@ wss.on('connection', function (wsClient) {
 
     //获取websocket的数据
     //测试代码本地测试本地
-    var miniAudioSocket = new WebSocket('ws://192.168.3.95:7500', 'minicap');
+    // var miniAudioSocket = new WebSocket('ws://192.168.3.95:7500', 'minicap');
+    var miniAudioSocket = new WebSocket('ws://127.0.0.1:7500', 'minicap');
 
     miniAudioSocket.onclose = function () {
         console.log('onclose', arguments)

@@ -12,7 +12,8 @@
             $(document).ready(function() {
             	  //var player = AV.Player.fromURL('http://localhost:8080/test.aac');
                 //var miniAudioSocketClient = new WebSocket('ws://192.168.3.95:9002', 'miniaudio');
-                var player=AV.Player.fromWebSocket('ws://192.168.3.95:8500');
+                // var player=AV.Player.fromWebSocket('ws://192.168.3.95:8500');
+                var player=AV.Player.fromWebSocket('ws://127.0.0.1:8500');
                 player.play();
             });
         </script>
