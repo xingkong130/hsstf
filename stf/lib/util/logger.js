@@ -117,7 +117,8 @@ Log.prototype._entry = function(priority, args) {
 }
 
 Log.prototype._format = function(entry) {
-  return util.format('%s/%s %d [%s] %s'
+  return util.format('%s %s/%s %d [%s] %s'
+    , formatDateTime(entry.timestamp)
     , this._name(entry.priority)
     , entry.tag
     , entry.pid
@@ -136,5 +137,22 @@ Log.prototype._write = function(entry) {
   this.emit('entry', entry)
   Logger.emit('entry', entry)
 }
+
+function formatDateTime(inputTime) {    
+  var date = new Date(inputTime);  
+  var y = date.getFullYear();    
+  var m = date.getMonth() + 1;    
+  m = m < 10 ? ('0' + m) : m;    
+  var d = date.getDate();    
+  d = d < 10 ? ('0' + d) : d;    
+  var h = date.getHours();  
+  h = h < 10 ? ('0' + h) : h;  
+  var minute = date.getMinutes();  
+  var second = date.getSeconds();  
+  var milesecond = date.getMilliseconds();  
+  minute = minute < 10 ? ('0' + minute) : minute;    
+  second = second < 10 ? ('0' + second) : second;   
+  return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second+'.'+milesecond;    
+} 
 
 exports = module.exports = Logger
