@@ -30,6 +30,8 @@ module.exports = {
 , userLogin: userLogin
 , userRegister: userRegister
 , bindUserDevice: bindUserDevice
+, getUsersByFilterAndPage: getUsersByFilterAndPage
+, removeUserById: removeUserById
 }
 
 function getUser(req, res) {
@@ -110,6 +112,7 @@ function userRegister(req, res) {
 }
 
 function userLogin(req, res) {
+  log.info(req,body,'------------>body')
   var flag = false
   if(!req.body.name)
     flag = true
@@ -555,24 +558,39 @@ function getUserAccessTokens(req, res) {
    */
 function bindUserDevice(req, res){
   var userid = req.body.userid
-  log.info('------------------------------------------>', userid)
-  dbapi.bindDevice({
-    userid: userid
-  })
-  .then(function(data) {
-        log.info('------------------------------------------>', data)
-    if(data && data.inserted) {
-      return res.json({
-          success: true
-        , description: 'Device successfully bind'
-        })
-    } else {
-      return res.status(500)
-      .json({
-        success: false
-      , description: 'Device bind failed'
+  log.info('bindUserDevice userid-------------------->', userid)
+
+  dbapi.getUserDevices(userid)
+  .then(function(cursor) {
+    return Promise.promisify(cursor.toArray, cursor)()
+      .then(function(list) {
+        //log.info('bindUserDevice device list-------------------->', list)
+        if(list && list.length > 0) {
+          return res.status(500).json({
+              success: false
+            , description: 'There are already devices in the binding'
+          })
+        } else {
+          dbapi.bindDevice({
+            userid: userid
+          })
+          .then(function(data) {
+            log.info('bindUserDevice data------------------------->', data)
+            if(data && data.inserted) {
+              return res.json({
+                  success: true
+                , description: 'Device successfully bind'
+                })
+            } else {
+              return res.status(500)
+              .json({
+                success: false
+              , description: 'Device bind failed'
+              })
+            }
+          })
+        }
       })
-    }
   })
   .catch(function(err) {
     log.error('Failed to bind device: "%s": ', userid, err.stack)
@@ -580,4 +598,74 @@ function bindUserDevice(req, res){
       success: false
     })
   })
+}
+
+
+function getUsersByFilterAndPage(req,res){
+  var arg = {
+    sort:req.swagger.params.sort.value=='undefined' || req.swagger.params.sort.value == undefined ? '':req.swagger.params.sort.value,
+    pageSize:req.swagger.params.pageSize.value=='undefined' || req.swagger.params.pageSize.value == undefined ? '':req.swagger.params.pageSize.value,
+    pageNum:req.swagger.params.pageNum.value=='undefined' || req.swagger.params.pageNum.value == undefined  ? '':req.swagger.params.pageNum.value,
+    filter:req.swagger.params.filter.value=='undefined' || req.swagger.params.filter.value == undefined  ? '':req.swagger.params.filter.value,
+  }
+  function getUserList(arg){
+    return new Promise(function(resolve,reject) {
+      try {
+        dbapi.getUsersByFilterAndPage(arg)
+          .then(function (results) {
+            resolve(results);
+          })
+
+      }catch (err) {
+        reject(err);
+      }
+    });
+  }
+  function getUserTotal(arg) {
+    return new Promise(function(resolve,reject) {
+      try {
+        dbapi.getUsersTotal(arg)
+          .then(function (results) {
+            resolve(results)
+          })
+      }catch (err) {
+        reject(err);
+      }
+    });
+
+  }
+  Promise.all([
+    getUserList(arg),
+    getUserTotal(arg),
+  ]).then(function (results) {
+    return res.json({
+      success:true,
+      rows: results[0],
+      total: results[1],
+    })
+  }).catch(function (err) {
+    return res.status(500)
+      .json({
+        success: false,
+        description: 'getUserList 500 path(getUsersByFilterAndPage)'
+      })
+  });
+
+}
+
+function removeUserById(req,res) {
+  var userId = req.swagger.params.serial.value
+  dbapi.removeUserById(userId)
+    .then(function (results) {
+      res.json({
+        success:true,
+        info:results
+      })
+    })
+    .catch(function (err) {
+      log.error('Failed to removeDeviceById: ', err.stack)
+      res.status(500).json({
+        success: false
+      })
+    })
 }
