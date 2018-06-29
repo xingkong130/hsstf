@@ -11,7 +11,8 @@
         <script type="text/javascript">
             $(document).ready(function() {
             	  //var player = AV.Player.fromURL('http://localhost:8080/test.aac');
-                var player=AV.Player.fromWebSocket('ws://localhost:8071/abcd123123');
+                // var player=AV.Player.fromWebSocket('ws://localhost:8500');
+                var player=AV.Player.fromWebSocket('ws://192.168.3.95:8500');
                 player.play();
             });
         </script>

@@ -5,7 +5,7 @@
 	node sendaudio.js
 	
 	2
-	recvaudio.js
+	node recvaudio.js
 	
 	3
 	http://localhost:8500/

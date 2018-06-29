@@ -24,55 +24,59 @@ wss.on('connection', function (wsClient) {
 
     //获取websocket的数据
     //测试代码本地测试本地
-    // var miniAudioSocket = new WebSocket('ws://192.168.3.95:7500', 'minicap');
-    var miniAudioSocket = new WebSocket('ws://127.0.0.1:7500', 'minicap');
-
-    miniAudioSocket.onclose = function () {
-        console.log('onclose', arguments)
-    };
-
-    miniAudioSocket.onerror = function () {
-        console.log('onerror', arguments)
-    };
-
-    miniAudioSocket.onmessage = function (message) {
-
-        wsClient.send(message.data, {
-                        binary: true
-                    });
-        console.log(message.data.length);
-    };
-
-    ////获取socket的连接数据
-    ////测试开发板上面代码
-
-    // var miniAudioSocket = net.Socket();
+    // var miniAudioSocket = new WebSocket('ws://127.0.0.1:7500', 'minicap');
     //
-    // miniAudioSocket.connect('1199', '127.0.0.1', function () {
-    //     console.log("Connected to miniaudio");
-    // });
+    // miniAudioSocket.onclose = function () {
+    //     console.log('onclose', arguments)
+    // };
     //
-    // function readAudio() {
-    //     console.log('read miniaudio data');
-    //     for (var chunk; (chunk = miniAudioSocket.read());) {
-    //             wsClient.send(chunk, {
-    //                             binary: true
-    //                         });
-    //     }
-    // }
+    // miniAudioSocket.onerror = function () {
+    //     console.log('onerror', arguments)
+    // };
     //
-    // miniAudioSocket.on('readable', readAudio);
+    // miniAudioSocket.onmessage = function (message) {
     //
-    // miniAudioSocket.on('error', function (error) {
-    //     console.error('Be sure to run `adb forward tcp:1199 localabstract:minicap`\n' + error);
-    // });
-    //
-    // miniAudioSocket.on('close', function (error) {
-    //     console.warn('miniaudio exit!`\n' + error);
-    // });
+    //     wsClient.send(message.data, {
+    //                     binary: true
+    //                 });
+    //     console.log(message.data.length);
+    // };
+
+    //获取socket的连接数据
+    //测试开发板上面代码
+
+    var miniAudioSocket = net.Socket();
+
+    miniAudioSocket.connect('1199', '127.0.0.1', function () {
+        console.log("Connected to miniaudio");
+    });
+
+    function readAudio() {
+        // console.log('read miniaudio data');
+        for (var chunk; (chunk = miniAudioSocket.read());) {
+            if(wsClient.readyState == WebSocket.OPEN)
+            {
+                // console.log('send data');
+                wsClient.send(chunk, {
+                    binary: true
+                });
+            }
+
+        }
+    }
+
+    miniAudioSocket.on('readable', readAudio);
+
+    miniAudioSocket.on('error', function (error) {
+        console.error('Be sure to run `adb forward tcp:1199 localabstract:minicap`\n' + error);
+    });
+
+    miniAudioSocket.on('close', function (error) {
+        console.warn('miniaudio exit!`\n' + error);
+    });
 
 });
 
-server.listen(PORT, "0.0.0.0", function () {
-    console.info('Listening on http://localhost:%d ', PORT);
+server.listen(PORT, "192.168.3.95", function () {
+    console.info('Listening on http://192.168.3.95:%d ', PORT);
 });
